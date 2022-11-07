@@ -1,7 +1,8 @@
 import cv2
 import os
 import glob
-import tqdm
+from tqdm import tqdm
+import yaml
 
 
 def save_all_frames(vid_path, dir_path, ext='jpg'):
@@ -18,19 +19,22 @@ def save_all_frames(vid_path, dir_path, ext='jpg'):
     while True:
         ret, frame = cap.read()
         if ret:
-            cv2.imwrite(f'{dir_path}/img_{str(n).zfill(digit)}', frame)
+            cv2.imwrite(f'{dir_path}/img_{str(n).zfill(digit)}.{ext}', frame)
             n += 1
         else:
             return
 
 
 if __name__ == '__main__':
-    vid_dir = ''
-    vid_ext = 'mp4'
-    img_dir = ''
-    img_ext = 'jpg'
+    with open("./config.yaml") as f:
+        args = yaml.safe_load(f)
 
-    files = glob.glob(f'{vid_dir}/.{vid_ext}')
+    vid_dir = args["vid_dir"]
+    vid_ext = args["vid_ext"]
+    img_dir = args["img_dir"]
+    img_ext = args["img_ext"]
+
+    files = glob.glob(f'{vid_dir}/*.{vid_ext}')
 
     for index, file in enumerate(tqdm(files)):
         basedir = f'{img_dir}/vid_{str(index).zfill(5)}'
