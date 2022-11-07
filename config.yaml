@@ -1,0 +1,4 @@
+vid_dir: 'E:\DataSet\CelebV-HQ\results\sample_vid_for_scripts'
+vid_ext: 'mp4'
+img_dir: 'E:\DataSet\CelebV-HQ\results\sample_img_for_scripts'
+img_ext: 'jpg'
