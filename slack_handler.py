@@ -1,6 +1,7 @@
 import requests
 import json
 import yaml
+import datetime
 
 
 def slack(data, webhook_url):
@@ -14,28 +15,38 @@ def process_notify(time, index, modelname):
     webhook_url = args['SlackHandler']['webhook_url']
 
     data = json.dumps({
-      "text": f"Notify {modelname} Study.",
-      "blocks": [
+      "attachments": [
         {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": f"Model: {modelname}\nTime: {time} \nIteration: {index}"
-          }
-        },
+          "pretext": f"{modelname} Study Notification.",
+          "color": "#AAFFAA",
+          "fields": [
+            {
+              "title": "Parameters\n",
+              "short": False,
+            },
+            {
+              "value": f"Iterations: {index}",
+              "short": False,
+            },
+            {
+              "value": f"Time: {time}",
+              "short": False,
+            },
+          ]
+        }
       ]
     })
     slack(data, webhook_url)
 
 
 if __name__ == '__main__':
-    with open('./config.yaml') as f:
-        args = yaml.safe_load(f)
+    # with open('./config.yaml') as f:
+    #     args = yaml.safe_load(f)
 
-    webhook_url = args['SlackHandler']['webhook_url']
+    # webhook_url = args['SlackHandler']['webhook_url']
 
-    requests.post(webhook_url, data=json.dumps({
-        "text": f"Test Post from Python",
-    }))
+    # requests.post(webhook_url, data=json.dumps({
+    #     "text": f"Test Post from Python",
+    # }))
 
-    # process_notify("2022-11-08 13:46", 100, "MoCoGAN-HD")
+    # process_notify(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 100, "MoCoGAN-HD")
