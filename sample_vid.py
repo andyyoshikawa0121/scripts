@@ -16,13 +16,13 @@ if __name__ == '__main__':
   vid_ext = args['vid_ext']
   num_sample_vid_ratio = args['num_sample_vid_ratio']
 
-  files = glob.glob(f'{vid_dir}*.{vid_ext}')
+  files = glob.glob(f'{vid_dir}/*.{vid_ext}')
   num_vid = len(files)
   num_sample = int(num_vid / num_sample_vid_ratio)
   sample_files = random.sample(files, num_sample)
   try:
     for index, file in enumerate(tqdm(sample_files)):
-      if index % int(sample_files / 10) == 0:
+      if index % int(num_sample / 5) == 0:
         post_params = [
           {
             "is_title": True,
@@ -32,7 +32,7 @@ if __name__ == '__main__':
           {
             "is_title": False,
             "name": "Total",
-            "value": f"{index}/{sample_files}",
+            "value": f"{index}/{num_sample}",
           }
         ]
         data = create_attachments("Process Notify", args["SlackHandler"]["green"], post_params)
