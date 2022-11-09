@@ -2,9 +2,12 @@ import requests
 import json
 import yaml
 import datetime
+from yaml_loader import yaml_loader
 
 
-def slack(data, webhook_url):
+def post_slack(data):
+    args = yaml_loader()
+    webhook_url = args['SlackHandler']['webhook_url']
     res = requests.post(webhook_url, data=data)
     print(res)
 
@@ -18,32 +21,28 @@ def create_attachments(pretext, color, params):
       }
     ]
   }
-
-  for param in params:
-    if param["is_title"]:
-      add_data = {
-        "title": param["name"],
-        "short": False,
-      }
-      data["attachments"][0]["fields"].append(add_data)
-    else:
-      add_data = {
-        "value": f'{param["name"]}: {param["value"]}',
-        "short": False,
-      }
-      data["attachments"][0]["fields"].append(add_data)
+  # データがある場合のみ追加
+  if params:
+    for param in params:
+      if param["is_title"]:
+        add_data = {
+          "title": param["name"],
+          "short": False,
+        }
+        data["attachments"][0]["fields"].append(add_data)
+      else:
+        add_data = {
+          "value": f'{param["name"]}: {param["value"]}',
+          "short": False,
+        }
+        data["attachments"][0]["fields"].append(add_data)
   
   return json.dumps(data)
 
 
 if __name__ == '__main__':
-    with open('./config.yaml') as f:
-        args = yaml.safe_load(f)
-    with open('./config_local.yaml') as fl:
-      args_local = yaml.safe_load(fl)
-
-    args.update(args_local)
-    webhook_url = args['SlackHandler']['webhook_url']
+    # args = yaml_loader()
+    # webhook_url = args['SlackHandler']['webhook_url']
 
     # requests.post(webhook_url, data=json.dumps({
     #     "text": f"Test Post from Python",
@@ -80,5 +79,5 @@ if __name__ == '__main__':
         "value": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
       }
     ]
-    data = create_attachments("Study Finish Notification", "#00BFE6", post_params)
-    res = slack(data, webhook_url)
+    data = create_attachments("Study Finish Notification", "#00BFE6", None)
+    res = post_slack(data)
