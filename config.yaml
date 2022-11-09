@@ -4,4 +4,4 @@ img_dir: 'E:\DataSet\CelebV-HQ\results\sample_img_for_scripts'
 img_ext: 'jpg'
 
 SlackHandler:
-  webhook_url: 'https://hooks.slack.com/services/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'
+  webhook_url: ''
