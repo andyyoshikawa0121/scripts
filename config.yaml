@@ -2,6 +2,11 @@ vid_dir: 'E:\DataSet\CelebV-HQ\results\sample_vid_for_scripts'
 vid_ext: 'mp4'
 img_dir: 'E:\DataSet\CelebV-HQ\results\sample_img_for_scripts'
 img_ext: 'jpg'
+sample_dir: '' 
+num_sample_vid_ratio: 10
 
 SlackHandler:
   webhook_url: ''
+  blue: '#00BFE6'
+  red: '#E60033'
+  green: '#00E600'
