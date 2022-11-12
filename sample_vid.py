@@ -23,40 +23,24 @@ if __name__ == '__main__':
   try:
     for index, file in enumerate(tqdm(sample_files)):
       if index % int(num_sample / 5) == 0:
-        post_params = [
-          {
-            "is_title": True,
-            "name": "Continue Copying",
-            "value": "",
-          },
-          {
-            "is_title": False,
-            "name": "Total",
-            "value": f"{index}/{num_sample}",
-          }
-        ]
+        post_params = {
+          "Continue Copying": "",
+          "Total": f"{index}/{num_sample}"
+        }
         data = create_attachments("Process Notify", args["SlackHandler"]["green"], post_params)
         post_slack(data)
       if os.path.exists(sample_dir):
         shutil.copy(file, sample_dir)
   except Exception as e:
-    error_params = [
-      {
-        "is_title": False,
-        "name": "Error",
-        "value": e,
-      }
-    ]
+    error_params = {
+      "Error": e,
+    }
     data = create_attachments("", args["SlackHandler"]["red"], error_params)
     post_slack(data)
 
-  post_params = [
-    {
-      "is_title": True,
-      "name": "Finish!",
-      "value": "",
-    }
-  ]
+  post_params = {
+    "Finish": "",
+  }
   data = create_attachments("", args["SlackHandler"]["blue"], post_params)
   post_slack(data)
 
