@@ -2,8 +2,7 @@ import cv2
 import os
 import glob
 from tqdm import tqdm
-import yaml
-
+from yaml_loader import yaml_loader
 
 def save_all_frames(vid_path, dir_path, ext='jpg'):
     cap = cv2.VideoCapture(vid_path)
@@ -26,8 +25,7 @@ def save_all_frames(vid_path, dir_path, ext='jpg'):
 
 
 if __name__ == '__main__':
-    with open("./config.yaml") as f:
-        args = yaml.safe_load(f)
+    args = yaml_loader()
 
     vid_dir = args["vid_dir"]
     vid_ext = args["vid_ext"]
