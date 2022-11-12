@@ -1,6 +1,5 @@
 import requests
 import json
-import yaml
 import datetime
 from yaml_loader import yaml_loader
 
@@ -23,16 +22,17 @@ def create_attachments(pretext, color, params):
   }
   # データがある場合のみ追加
   if params:
-    for param in params:
-      if param["is_title"]:
+    keys = params.keys()
+    for key in keys:
+      if params[key] == "":
         add_data = {
-          "title": param["name"],
+          "title": key,
           "short": False,
         }
         data["attachments"][0]["fields"].append(add_data)
       else:
         add_data = {
-          "value": f'{param["name"]}: {param["value"]}',
+          "value": f'{key}: {params[key]}',
           "short": False,
         }
         data["attachments"][0]["fields"].append(add_data)
@@ -41,43 +41,15 @@ def create_attachments(pretext, color, params):
 
 
 if __name__ == '__main__':
-    # args = yaml_loader()
-    # webhook_url = args['SlackHandler']['webhook_url']
+    args = yaml_loader()
+    blue = args['SlackHandler']['blue']
 
-    # requests.post(webhook_url, data=json.dumps({
-    #     "text": f"Test Post from Python",
-    # }))
-
-    # process_notify(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 100, "MoCoGAN-HD")
-    # error_notify('Segmentation Fault', "MoCoGAN-HD")
-    # finish_notify("MoCoGAN-HD")
-
-    post_params = [
-      {
-        "is_title": True,
-        "name": "Study Finished",
-        "value": "",
-      },
-      {
-        "is_title": False,
-        "name": "Model",
-        "value": "MoCoGAN-HD",
-      },
-      {
-        "is_title": False,
-        "name": "Iterations",
-        "value": "50000",
-      },
-      {
-        "is_title": False,
-        "name": "FID",
-        "value": "20.3",
-      },
-      {
-        "is_title": False,
-        "name": "Time",
-        "value": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-      }
-    ]
-    data = create_attachments("Study Finish Notification", "#00BFE6", None)
+    post_params = {
+      "Continue Copying": "",
+      "Model": "MoCoGAN-HD",
+      "Iterations": "50000",
+      "FID": "20.3",
+      "Time": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    data = create_attachments("Study Finish Notification", blue, post_params)
     res = post_slack(data)
